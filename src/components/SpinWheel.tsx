@@ -3,23 +3,25 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
 const prizes = [
-  { id: 1, text: '100₽', color: '#FF6B6B', textColor: 'white' },
-  { id: 2, text: '500₽', color: '#4ECDC4', textColor: 'white' },
-  { id: 3, text: '1000₽', color: '#45B7D1', textColor: 'white' },
-  { id: 4, text: '200₽', color: '#96CEB4', textColor: 'white' },
-  { id: 5, text: '750₽', color: '#FFEAA7', textColor: 'black' },
-  { id: 6, text: '1500₽', color: '#DDA0DD', textColor: 'white' },
-  { id: 7, text: '300₽', color: '#98D8C8', textColor: 'black' },
-  { id: 8, text: '2000₽', color: '#A29BFE', textColor: 'white' }
+  { id: 1, text: '৳১০০', color: '#FF6B6B', textColor: 'white' },
+  { id: 2, text: '৳৫০০', color: '#4ECDC4', textColor: 'white' },
+  { id: 3, text: '৳১০০০', color: '#45B7D1', textColor: 'white' },
+  { id: 4, text: '৳২০০', color: '#96CEB4', textColor: 'white' },
+  { id: 5, text: '৳৭৫০', color: '#FFEAA7', textColor: 'black' },
+  { id: 6, text: '৳১৫০০', color: '#DDA0DD', textColor: 'white' },
+  { id: 7, text: '৳৩০০', color: '#98D8C8', textColor: 'black' },
+  { id: 8, text: '৳২০০০', color: '#A29BFE', textColor: 'white' }
 ];
 
 const SpinWheel = () => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [winner, setWinner] = useState<string | null>(null);
+  const [hasSpun, setHasSpun] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(180); // 3 minutes in seconds
 
   const spinWheel = () => {
-    if (isSpinning) return;
+    if (isSpinning || hasSpun) return;
     
     setIsSpinning(true);
     setWinner(null);
@@ -38,7 +40,31 @@ const SpinWheel = () => {
     setTimeout(() => {
       setIsSpinning(false);
       setWinner(prizes[winnerIndex].text);
+      setHasSpun(true);
+      startTimer();
     }, 3000);
+  };
+
+  const startTimer = () => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
+  const handleClaim = () => {
+    window.open('https://gamehub.g2afse.com/click?pid=3640&offer_id=429', '_blank');
   };
 
   return (
@@ -79,7 +105,7 @@ const SpinWheel = () => {
                           style={{
                             top: '30%',
                             left: '50%',
-                            transform: `translateX(-50%) rotate(${segmentAngle / 2}deg)`,
+                            transform: 'translateX(-50%)',
                             color: prize.textColor,
                             textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
                           }}
@@ -113,20 +139,31 @@ const SpinWheel = () => {
         </div>
       </div>
 
-      {/* Spin button */}
-      <Button 
-        onClick={spinWheel}
-        disabled={isSpinning}
-        className="px-12 py-4 text-xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isSpinning ? 'Крутится...' : 'Крутить колесо!'}
-      </Button>
+      {/* Spin button or Claim button */}
+      {!hasSpun ? (
+        <Button 
+          onClick={spinWheel}
+          disabled={isSpinning}
+          className="px-12 py-4 text-xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSpinning ? 'ঘুরছে...' : 'চাকা ঘুরান!'}
+        </Button>
+      ) : (
+        <Button 
+          onClick={handleClaim}
+          className="px-12 py-4 text-xl font-bold bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg transform hover:scale-105 transition-all duration-200"
+        >
+          অভিনন্দন!
+        </Button>
+      )}
 
-      {/* Winner display */}
+      {/* Winner display with timer */}
       {winner && (
         <div className="text-center p-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg shadow-xl animate-bounce">
-          <h3 className="text-2xl font-bold text-black mb-2">Поздравляем! 🎉</h3>
-          <p className="text-xl font-semibold text-black">Вы выиграли: {winner}</p>
+          <h3 className="text-2xl font-bold text-black mb-2">অভিনন্দন! আপনার জয়: {winner} 🎉</h3>
+          <div className="text-xl font-semibold text-red-600 bg-white rounded px-4 py-2 mt-4">
+            সময় বাকি: {formatTime(timeLeft)}
+          </div>
         </div>
       )}
     </div>
