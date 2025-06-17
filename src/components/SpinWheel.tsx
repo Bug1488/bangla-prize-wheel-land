@@ -101,13 +101,15 @@ const SpinWheel = () => {
                         style={{ backgroundColor: prize.color }}
                       >
                         <div 
-                          className="absolute font-bold text-lg"
+                          className="absolute font-bold text-lg flex items-center justify-center"
                           style={{
-                            top: '30%',
+                            top: '25%',
                             left: '50%',
-                            transform: 'translateX(-50%)',
+                            transform: `translateX(-50%) rotate(${-angle + (segmentAngle / 2)}deg)`,
                             color: prize.textColor,
-                            textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+                            textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                            width: '80px',
+                            height: '30px'
                           }}
                         >
                           {prize.text}
