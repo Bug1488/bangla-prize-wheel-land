@@ -3,10 +3,10 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 
 const prizes = [
-  { amount: '৳১০০', chance: '৪০%', icon: '🎁' },
-  { amount: '৳৫০০', chance: '২৫%', icon: '💰' },
-  { amount: '৳১০০০', chance: '২০%', icon: '💎' },
-  { amount: '৳২০০০', chance: '১৫%', icon: '👑' }
+  { amount: '১০০ টাকা', chance: '৪০%', icon: '🎁' },
+  { amount: '৫০০ টাকা', chance: '২৫%', icon: '💰' },
+  { amount: '১০০০ টাকা', chance: '২০%', icon: '💎' },
+  { amount: '২০০০ টাকা', chance: '১৫%', icon: '👑' }
 ];
 
 const PrizeSection = () => {
@@ -20,7 +20,7 @@ const PrizeSection = () => {
           <Card key={index} className="bg-gradient-to-br from-gray-800 to-gray-900 border-yellow-400/30 p-4 text-center hover:scale-105 transition-transform duration-200">
             <div className="text-3xl mb-2">{prize.icon}</div>
             <div className="text-lg font-bold text-yellow-400">{prize.amount}</div>
-            <div className="text-sm text-gray-400">জেতার সুযোগ</div>
+            <div className="text-sm text-gray-400">জেতার সম্ভাবনা</div>
             <div className="text-sm font-semibold text-green-400">{prize.chance}</div>
           </Card>
         ))}
